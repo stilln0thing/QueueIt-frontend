@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-
+import axios from "axios"
 import { useState, useEffect } from "react"
 import { useSearchParams } from "next/navigation"
 import Link from "next/link"
@@ -25,10 +25,30 @@ export default function SignupPage() {
     }
   }, [searchParams])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     // Handle signup logic here
-    console.log("Signup attempt with:", { name, email, password, userType })
+    const payload = {
+      firstname: name.split(" ")[0],
+      lastname: name.split(" ").slice(1).join(" "),
+      password,
+      email,
+    }
+    console.log(payload
+    )
+  
+
+  try {
+    // Send the signup request to the backend
+    const response = await axios.post("http://localhost:8080/users/signup", payload)
+    console.log("Signup successful:", response.data)
+
+    // Handle successful signup (e.g., redirect to login page or show success message)
+  } catch (error) {
+    console.error("Signup failed:", error)
+    // Handle error (e.g., show error message to the user)
+  }
+    
   }
 
   return (

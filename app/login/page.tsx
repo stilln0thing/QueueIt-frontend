@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-
+import axios from "axios"
 import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -13,10 +13,22 @@ export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle login logic here
-    console.log("Login attempt with:", email, password)
+    const payload = {
+      email,
+      password,
+    }
+  
+    try {
+      const response = await axios.post("http://localhost:8080/users/login", payload)
+      console.log("Login successful:", response.data)
+  
+      // Handle successful login (e.g., save token, redirect, etc.)
+    } catch (error) {
+      console.error("Login failed:", error)
+      // Handle error (e.g., show error message to the user)
+    }
   }
 
   return (
